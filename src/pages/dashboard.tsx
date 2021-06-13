@@ -1,5 +1,6 @@
 import { Flex, SimpleGrid, Box, Text, theme } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
+import { ApexOptions } from 'apexcharts';
 import { Header } from "../components/Header";
 import { SideBar } from '../components/SideBar';
 /* o módulo react-apexcharts só é funcional pelo lado do cliente (browser). Ele não 
@@ -24,7 +25,7 @@ const Chart = dynamic(() => import('react-apexcharts'), {
 });
 
 //Variável de configurações do gráfico
-const options = {
+const options: ApexOptions = {
     chart: {
         toolbar: {
             show: false,
@@ -41,24 +42,24 @@ const options = {
         enabled: false,
     },
     tooltip: {
-        enabled: false,
+        enabled: false
     },
     xaxis: {
         type: 'datetime',
         axisBorder: {
-            color: theme.colors.gray[600],
+            color: theme.colors.gray[600]
         },
         axisTicks: {
-            color: theme.colors.gray[600],
+            color: theme.colors.gray[600]
         },
         categories: [
-            '2021-03-18T00:00:00.000Z',
-            '2021-03-19T00:00:00.000Z',
-            '2021-03-20T00:00:00.000Z',
-            '2021-03-21T00:00:00.000Z',
-            '2021-03-22T00:00:00.000Z',
-            '2021-03-23T00:00:00.000Z',
-            '2021-03-24T00:00:00.000Z'
+            '2021-05-28T00:00:00.000Z',
+            '2021-05-29T00:00:00.000Z',
+            '2021-05-30T00:00:00.000Z',
+            '2021-05-31T00:00:00.000Z',
+            '2021-06-01T00:00:00.000Z',
+            '2021-06-02T00:00:00.000Z',
+            '2021-06-03T00:00:00.000Z',
         ],
     },
     fill: {
@@ -67,7 +68,7 @@ const options = {
         gradient: {
             shade: 'dark',
             opacityFrom: 0.7,
-            opacityTo: 0.3,
+            opacityTo: 0.3
         }
     }
 };

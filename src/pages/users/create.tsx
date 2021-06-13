@@ -6,6 +6,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from "../../components/Form/Input";
 import { Header } from "../../components/Header";
 import { SideBar } from "../../components/SideBar";
+import { useMutation } from 'react-query';
+import { api } from "../../service/api";
+import { queryClient } from "../../service/queryClient";
+import { useRouter } from "next/router";
 
 type CreateUserFormData = {
     name: string;
@@ -25,6 +29,28 @@ type CreateUserFormData = {
   });
 
 export default function CreateUser() {
+    const router = useRouter();
+
+    //Cadastrando usuário na api e salvando no cache
+    /* A diferença de utilizar o react-query para essa chamada a api é que com ele
+    conseguimos monitorar o estado da requisição (ex: se está em loading, se está pausada, etc...) */
+    const createUser = useMutation(async (user: CreateUserFormData) => {
+        const response = await api.post('users', {
+            user: {
+                ...user,
+                created_at: new Date(),
+            }
+        });
+        console.log(response.data.users)
+
+        return response.data.user;
+    }, {
+        //Limpando o cache da listagem de usuários quando a criação de um usuário der sucesso
+        onSuccess: () => {
+            queryClient.invalidateQueries('users');
+        }
+    });
+
     const { register, handleSubmit, formState } = useForm({
         resolver: yupResolver(createUserFormSchema)
     });
@@ -32,7 +58,10 @@ export default function CreateUser() {
 
     const handleCreateUser: SubmitHandler<CreateUserFormData> = async (values) => {
        // console.log(values);
-       await new Promise(resolve => setTimeout(resolve, 2000));
+       await createUser.mutateAsync(values);
+
+       //Enviando usuário de volta p/ tela de users
+       router.push('/users');
     }
 
     return(
